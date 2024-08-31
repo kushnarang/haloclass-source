@@ -1,18 +1,18 @@
 
 import pickle
 import pandas as pd
-from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 from tap import Tap
 
 from haloclass.publish.generate_embeddings import ImportedFasta, checkpoint150
 from haloclass.publish.helpers import do_metrics, load_pickled_dataset
-import matplotlib.pyplot as plt
+from pathlib import Path
 
 class UseModelArgs(Tap):
-    model_path: str = "../publication-datasets/model.pkl"
+    model_path: str = f"{Path(__file__).parent.parent.parent.absolute()}/publication-datasets/model.pkl"
     preset: str = None
     fasta: str = None
     save_preds: str = None
+    ignore_labels: bool = True
 
 PRESETS = {
     "zhang": ["publication-datasets/external/zhang139.fasta", lambda x: 1 if "Salinibacter ruber" in str(x.description) else 0],
@@ -44,7 +44,7 @@ def main():
             embeddings = checkpoint150(combined.sequences, combined.labels)
             labels = combined.labels
     elif fasta:
-        combined = ImportedFasta.from_fasta(args.fasta, "default")
+        combined = ImportedFasta.from_fasta(args.fasta, 0 if args.ignore_labels else "default")
         embeddings = checkpoint150(combined.sequences, combined.labels)
         labels = combined.labels
     else:
