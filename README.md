@@ -5,6 +5,8 @@
 HaloClass has been tested on Python 3.10.11.
 
 `$ pip3 install typed-argument-parser torch transformers datasets biopython tqdm`
+`$ pip3 install -e haloclass-source`
+`$ cd haloclass-source`
 
 ## Usage
 

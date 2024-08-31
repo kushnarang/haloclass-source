@@ -9,7 +9,7 @@ from haloclass.publish.helpers import do_metrics, load_pickled_dataset
 import matplotlib.pyplot as plt
 
 class UseModelArgs(Tap):
-    model_path: str = "publication-datasets/model.pkl"
+    model_path: str = "../publication-datasets/model.pkl"
     preset: str = None
     fasta: str = None
     save_preds: str = None
