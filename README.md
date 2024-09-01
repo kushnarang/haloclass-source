@@ -8,7 +8,7 @@ Kush Narang*, Abhigyan Nath, William Hemstrom, Simon K. S. Chu
 
 HaloClass has been tested on Python 3.10.11.
 
-`$ pip3 install typed-argument-parser torch transformers datasets biopython tqdm`
+`$ pip3 install typed-argument-parser torch transformers datasets biopython tqdm pandas numpy scikit-learn`
 
 `$ pip3 install -e haloclass-source`
 
@@ -19,9 +19,11 @@ HaloClass has been tested on Python 3.10.11.
 
 ### To save predictions and confidences
 
-A CSV file (`predictions.csv`) will be outputted with three columns: HaloClass predictions, HaloClass confidence, and the corresponding sequence. Labels in the FASTA sequence names will be ignored.
+A CSV file (`predictions.csv`) will be outputted with three columns: predicted labels, HaloClass predictions, HaloClass salt-tolerance confidences, and the corresponding sequences. Labels in the FASTA sequence names will be ignored.
 
 `$ python3 haloclass/publish/evaluate.py --fasta INPUT_FASTA_FILE.fasta`
+
+Interpreting confidences: A confidence of 0 indicates full confidence that the sequence is non-tolerant. A confidence of 1 indicates full confidence that the sequence is salt-tolerant. Intermediate values are how the model expresses non-certainty. Confidences are rounded to determine predictions and labels.
 
 
 #### Changing the output file name (for evaluate.py)
@@ -48,7 +50,7 @@ By default, HaloClass evaluates sequences in batches of 32. To alter this, use t
 
 ### To print performance metrics
 
-True labels should be specified as the FASTA sequence names `0` for **non-tolerant** and `1` for **salt-tolerant**. See `publication-datasets/eval.fasta` for an example. This flag will print the model's AUROC, MCC, AUPRC, and Accuracy on this dataset. This relies on labels being _accurate and formatted correctly_.
+True labels should be specified as the FASTA sequence names `0` for **non-tolerant** and `1` for **salt-tolerant**. See `publication-datasets/eval.fasta` for an example. This flag will print the model's AUROC, MCC, AUPRC, Confusion Matrix stats, and Accuracy on this dataset. This relies on labels being _accurate and formatted correctly_.
 
 `$ python3 haloclass-source/haloclass/publish/evaluate.py --print_perf --fasta INPUT_FASTA_FILE.fasta`
 
