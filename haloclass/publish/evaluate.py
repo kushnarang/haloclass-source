@@ -12,7 +12,7 @@ class UseModelSimpleArgs(Tap):
     model_path: str = f"{Path(__file__).parent.parent.parent.absolute()}/publication-datasets/model.pkl"
     fasta: str
     save: str = "predictions.csv"
-    perf_only: bool = False
+    print_perf: bool = False
     disable_accelerators: bool = False
     batch_size: int = 32
 
@@ -27,12 +27,15 @@ def main():
     combined = ImportedFasta.from_fasta(fasta, 0)
     embeddings = checkpoint150(combined.sequences, combined.labels, disable_accelerators=args.disable_accelerators, batch_size=args.batch_size)
 
-    if args.perf_only:
+    if args.print_perf:
+        print("=" * 50)
+        print("MODEL PERFORMANCE:")
         print(evaluate_model(model, embeddings, combined.labels))
-        return
+        print("=" * 50)
     
     df = pd.DataFrame({ "sequences": combined.sequences, "predictions": model.predict(embeddings), "confidences": model.predict_proba(embeddings)[:,1] })
     df.to_csv(save, index=False)
+    print(f"Full model predictions are saved to {Path(save).absolute()}")
 
 if __name__ == "__main__":
     main()
