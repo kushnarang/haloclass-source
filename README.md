@@ -21,7 +21,7 @@ HaloClass has been tested on Python 3.10.11.
 
 A CSV file (`predictions.csv`) will be outputted with three columns: HaloClass predictions, HaloClass confidence, and the corresponding sequence. Labels in the FASTA sequence names will be ignored.
 
-`$ python3 haloclass/publish/use_model.py --fasta INPUT_FASTA_FILE.fasta`
+`$ python3 haloclass/publish/evaluate.py --fasta INPUT_FASTA_FILE.fasta`
 
 
 #### Changing the output file name (for evaluate.py)
