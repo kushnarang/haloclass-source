@@ -116,7 +116,7 @@ def main():
 	args = GenEmbedsArgs().parse_args()
 
 	input_file = Path(args.input_file)
-	output_prefix = Path(args.output_prefix)
+	output_prefix = args.output_prefix
 
 	combined = ImportedFasta.from_fasta(input_file, "default")
 
