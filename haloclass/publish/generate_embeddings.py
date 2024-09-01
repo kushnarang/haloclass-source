@@ -84,10 +84,13 @@ def generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=
 	return all_embeddings, end - start
 
 # 150M
-def checkpoint150(sequences, labels):
+def checkpoint150(sequences, labels, disable_accelerators=False, batch_size=32):
 	device = torch.device("cpu")
-	if torch.backends.mps.is_available(): device = torch.device("mps")
-	if torch.cuda.is_available(): device = torch.device("cuda")
+	if not disable_accelerators:
+		if torch.backends.mps.is_available(): device = torch.device("mps")
+		if torch.cuda.is_available(): device = torch.device("cuda")
+	
+	print(f"Creating embeddings on {device}")
 
 	set_seed(42)
 
@@ -96,7 +99,7 @@ def checkpoint150(sequences, labels):
 	model = model.eval()
 
 	tokenizer = AutoTokenizer.from_pretrained("facebook/esm2_t30_150M_UR50D")
-	embeddings, wall_time = generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=32)
+	embeddings, wall_time = generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=batch_size)
 	return embeddings
 
 def main():
