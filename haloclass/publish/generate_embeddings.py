@@ -10,7 +10,14 @@ from Bio.SeqRecord import SeqRecord
 
 from dataclasses import dataclass
 import time
-from tqdm import tqdm
+
+try:
+	__IPYTHON__ # type: ignore
+	_in_ipython_session = True
+	from tqdm.notebook import tqdm
+except NameError:
+	_in_ipython_session = False
+	from tqdm import tqdm
 
 class GenEmbedsArgs(Tap):
     input_file: str
@@ -40,10 +47,11 @@ class ImportedFasta:
 			
 		return ImportedFasta(sequences, label)
 
-def generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=32):
+def generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=32, disable_accelerators=False):
 	device = torch.device("cpu")
-	if torch.backends.mps.is_available(): device = torch.device("mps")
-	if torch.cuda.is_available(): device = torch.device("cuda")
+	if not disable_accelerators:
+		if torch.backends.mps.is_available(): device = torch.device("mps")
+		if torch.cuda.is_available(): device = torch.device("cuda")
 
 	set_seed(42)
 	start = time.time()
@@ -57,6 +65,8 @@ def generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=
 		"sequences": sequences,
 		"lengths": [len(p) for p in sequences]
 	}).map(collate_fn, remove_columns="sequences")
+
+	print("=== Tokenizing is complete ===")
 
 	loader = torch.utils.data.DataLoader(dataset.with_format("torch"), batch_size=batch_size)
 	all_embeddings = []
@@ -99,7 +109,7 @@ def checkpoint150(sequences, labels, disable_accelerators=False, batch_size=32):
 	model = model.eval()
 
 	tokenizer = AutoTokenizer.from_pretrained("facebook/esm2_t30_150M_UR50D")
-	embeddings, wall_time = generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=batch_size)
+	embeddings, wall_time = generate_embeddings(device, model, tokenizer, sequences, labels, batch_size=batch_size, disable_accelerators=disable_accelerators)
 	return embeddings
 
 def main():

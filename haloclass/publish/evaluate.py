@@ -41,7 +41,11 @@ def main():
     
     df = pd.DataFrame({ "sequences": combined.sequences, "predicted labels": decisions, "predictions": predictions, "confidences": model.predict_proba(embeddings)[:,1] })
     df.to_csv(save, index=False)
-    print(f"Full model predictions are saved to {Path(save).absolute()}")
+    print(f"=" * 25)
+    print(f"=" * 25)
+    print(f"Full model predictions and confidences are saved to: {Path(save).absolute()}")
+    print(f"=" * 25)
+    print(f"=" * 25)
 
 if __name__ == "__main__":
     main()
