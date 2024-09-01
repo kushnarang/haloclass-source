@@ -60,7 +60,7 @@ True labels should be specified as the FASTA sequence names `0` for **non-tolera
 
 #### First, generate embeddings
 
-`$ python3 haloclass/publish/generate_embeddings --input_file YOUR_FASTA_FILE.fasta --output_prefix YOUR_PREFIX`
+`$ python3 haloclass/publish/generate_embeddings.py --input_file YOUR_FASTA_FILE.fasta --output_prefix YOUR_PREFIX`
 
 This process will generate two output files:
 
