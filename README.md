@@ -52,7 +52,7 @@ By default, HaloClass evaluates sequences in batches of 32. To alter this, use t
 
 True labels should be specified as the FASTA sequence names `0` for **non-tolerant** and `1` for **salt-tolerant**. See `publication-datasets/eval.fasta` for an example. This flag will print the model's AUROC, MCC, AUPRC, Confusion Matrix stats, and Accuracy on this dataset. This relies on labels being _accurate and formatted correctly_.
 
-`$ python3 haloclass-source/haloclass/publish/evaluate.py --print_perf --fasta INPUT_FASTA_FILE.fasta`
+`$ python3 haloclass/publish/evaluate.py --print_perf --fasta INPUT_FASTA_FILE.fasta`
 
 ---
 
